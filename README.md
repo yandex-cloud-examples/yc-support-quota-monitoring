@@ -60,8 +60,8 @@
 * Клонировать код из репозитория:
 
 ```
-$ git clone https://github.com/yandex-cloud/{TBD}
-$ cd ./{TBD}
+$ git clone https://github.com/yandex-cloud-examples/yc-support-quota-monitoring.git
+$ cd yc-support-quota-monitoring
 ```
 
 * В конфигурации `provider.tf` изменить параметр авторизации `token` на полученный IAM-токен с помощью yc CLI `yc iam create-token` (или заменить на свой способ) и значения `cloud_id`, `folder_id`  и `zone`;
