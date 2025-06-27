@@ -1,6 +1,7 @@
 resource "yandex_iam_service_account" "quota_monitor_sa" {
   name        = "quota-monitor-sa"
   description = "service account for quota monitoring function"
+  folder_id = var.monitoring_folder_id
 }
 
 resource "yandex_resourcemanager_folder_iam_binding" "quota-monitor-sa-monitoring" {
@@ -28,7 +29,7 @@ resource "yandex_function" "quota_monitor_function" {
   name               = "quotamonitor"
   description        = "Quota monitoring serverless function"
   entrypoint		 = "index.handler"
-  
+  folder_id = var.monitoring_folder_id
   environment = {
     FOLDER_ID = var.monitoring_folder_id
 	BILLING_ID = var.monitoring_billing_account_id
@@ -59,6 +60,7 @@ resource "yandex_function_iam_binding" "quota_monitor_function_iam" {
 resource "yandex_function_trigger" "quota_monitor_function_trigger" {
   depends_on = [yandex_function_iam_binding.quota_monitor_function_iam]
   name        = "quotamonitortrigger"
+  folder_id = var.monitoring_folder_id
   timer {
     cron_expression = "*/30 * ? * * *"
   }
@@ -74,6 +76,7 @@ resource "yandex_monitoring_dashboard" "quota_monitor_clouds" {
   name        = ""
   description = "Dashboard for monitoring Clouds quota usage"
   title       = "Quota monitor (Clouds)"
+  folder_id = var.monitoring_folder_id
 
   parametrization {
     selectors = "{cloud_id=\"*\"}"
@@ -192,6 +195,7 @@ resource "yandex_monitoring_dashboard" "quota_monitor_billing" {
   name        = ""
   description = "Dashboard for monitoring billing accounts quota usage"
   title       = "Quota monitor (Billing)"
+  folder_id = var.monitoring_folder_id
 
   parametrization {
     selectors = "{billing_account_id=\"*\"}"
@@ -290,6 +294,7 @@ resource "yandex_monitoring_dashboard" "quota_monitor_organization_manager" {
   name        = ""
   description = "Dashboard for monitoring Orginization Manager quota usage"
   title       = "Quota monitor (Orginization Manager)"
+  folder_id = var.monitoring_folder_id
   
    parametrization {
     selectors = "{org_id=\"*\"}"
